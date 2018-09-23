@@ -1,0 +1,193 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+
+
+/**
+ * 状态面板的属性的方法
+ *
+ *
+ *
+ */
+public class JStatusPanel extends JPanel implements ActionListener {
+    private int leftMineCount;
+    private JLED ledTimer = new JLED();
+    private JLED ledMineCountLeft = new JLED();
+    public JLabel expressionLabel = new JLabel(ImageIconFactory.getFaceSmile());
+    private Timer timer = new Timer(1000, this);
+//    private MouseListener expressionLabelListener = new ExpressionListener();
+    private JMineSweeperFrame mineSweeperFrame;
+
+    /**
+     * 设置表情为惊讶
+     */
+    public void setFaceSurprised() {
+        expressionLabel.setIcon(ImageIconFactory.getFaceSurprised());
+    }
+
+    /**
+     * 设置表情为快乐
+     */
+    public void setFaceHappy() {
+        expressionLabel.setIcon(ImageIconFactory.getFaceHappy());
+    }
+
+    /**
+     * 设置它的主窗口引用
+     *
+     * @param s
+     *            主窗口引用
+     */
+    public void addMineSweeperFrame(JMineSweeperFrame s) {
+        this.mineSweeperFrame = s;
+    }
+
+    /**
+     * 设置表情按下的笑脸图标
+     */
+    public void setFaceSmilePressed() {
+        expressionLabel.setIcon(ImageIconFactory.getFaceSmilePressed());
+    }
+
+    /**
+     * 计时器的监听处理方法 当计时器的数字为999时停止计时器
+     */
+    @Override
+    public void actionPerformed(ActionEvent e)  {
+        try {
+            ledTimer.setNumber(ledTimer.getNumber() + 1);
+            if (ledTimer.getNumber() == 999) {
+                // 停止计数器
+                timer.stop();
+            }
+        }catch (Exception e1){
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * 初始化状态面板
+     */
+    public JStatusPanel() {
+        // ledTimerPanel.setBackground(Color.green);
+        // expressionPanel.setBackground(Color.blue);
+        // ledMineCountPanel.setBackground(Color.pink);
+
+        Border bevelBorder = BorderFactory
+                .createBevelBorder(BevelBorder.LOWERED);
+        this.setBackground(Color.LIGHT_GRAY);
+        this.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(5, 5,
+                2, 5), bevelBorder));
+        this.setPreferredSize(new Dimension(100, 47));
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.add(Box.createHorizontalStrut(5));// 填充不了哦。
+        this.add(ledMineCountLeft);
+        this.add(Box.createHorizontalGlue());
+        this.add(expressionLabel);
+        this.add(Box.createHorizontalGlue());
+        this.add(ledTimer);
+        this.add(Box.createHorizontalStrut(5));
+        this.setDelay(1000);
+//        this.expressionLabel.addMouseListener(new ExpressionListener());
+    }
+
+    public boolean isPressed;
+
+    /**
+     * 设置延迟时间
+     *
+     * @param delay
+     *            延迟时间以毫秒为单位
+     */
+    public void setDelay(int delay) {
+        timer.setDelay(delay);
+
+    }
+
+    /**
+     * 启动计时器
+     */
+    public void setTimerStart() {
+        timer.start();
+    }
+
+    /**
+     * 停止计时器
+     */
+    public void setTimerStop() {
+        timer.stop();
+    }
+
+    /**
+     * 启动计时器
+     */
+    public void startsTimer() {
+        timer.start();
+    }
+
+    /**
+     * 设置表情为哭
+     */
+    public void setFaceCry() {
+        this.expressionLabel.setIcon(ImageIconFactory.getFaceCry());
+    }
+
+    /**
+     * 得到计时器的当前时间
+     */
+    public int getTimerValue() {
+        return ledTimer.getNumber();
+    }
+
+    /**
+     * 设置计时器的时间
+     */
+    public void setTimerValue(int n) throws Exception{
+        ledTimer.setNumber(0);
+    }
+
+    /**
+     * 停止计时器
+     */
+    public void stopTimer() {
+        this.timer.stop();
+    }
+
+    /**
+     * 设置表情为微笑
+     */
+    public void setFaceSmile() {
+        expressionLabel.setIcon(ImageIconFactory.getFaceSmile());
+    }
+
+    /**
+     * 重置计时器
+     */
+    public void resetTimer() throws Exception{
+        timer.stop();
+        setTimerValue(0);
+
+    }
+
+  /**
+     * 设置剩余雷数的显示值
+     *
+     * @param count
+     *            剩余雷数
+     */
+    public void setLEDMineCountLeft(int count) throws Exception{
+        ledMineCountLeft.setNumber(count);
+    }
+
+    /**
+     * 得到计时器的显示值
+     *
+     * @return 计时器的值
+     * @param spendTime
+     */
+    public int getLEDTime(int spendTime) {
+        return ledTimer.getNumber();
+    }
+}
