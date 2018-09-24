@@ -18,7 +18,7 @@ public  class MineArea extends JPanel implements ActionListener,MouseListener, A
     int grade;   //级别
     //JPanel pCenter,pNorth;  //两个面板
 //    JTextField showTime,showMarkedMineCount; //两个文本框，显示用时以及标记数
-    Timer time;  //计时器
+//    Timer time;  //计时器
     int spendTime=0;
     Record record;
 
@@ -29,7 +29,8 @@ public  class MineArea extends JPanel implements ActionListener,MouseListener, A
 //        jstatusPanel.expressionLabel.setPreferredSize(new Dimension(26,26));
 //        jstatusPanel.expressionLabel.setIcon(ImageIconFactory.getFaceSmile());
         mark=new ImageIcon(String.valueOf(ImageIconFactory.getFlag()));  //探雷标记
-        time=new Timer(1000,this);  //计数器初值1000mm
+        jstatusPanel.setDelay(1000);
+//        time=new Timer(1000,this);  //计数器初值1000mm
 //        showTime=new JTextField(5);  //时间最多5个字符
 //        showMarkedMineCount=new JTextField(5);  //地雷数
 //        showTime.setHorizontalAlignment(JTextField.CENTER);  //水平对齐方式
@@ -95,7 +96,7 @@ public  class MineArea extends JPanel implements ActionListener,MouseListener, A
 
         jBlockPanel.removeAll();  //清空
         jstatusPanel.setLEDMineCountLeft(mineCount);//设置雷数
-        jstatusPanel.setTimerValue(0);//计时器归零
+        jstatusPanel.setTimerValue(jstatusPanel.getLEDTime(spendTime));//计时器归零
         this.row=row;
         this.colum=colum;
         this.mineCount=mineCount;
@@ -145,7 +146,7 @@ public  class MineArea extends JPanel implements ActionListener,MouseListener, A
     }
     public int getGrade(){return this.grade;}
     public void actionPerformed(ActionEvent e) {  //动作监听器
-        if(e.getSource()!=jstatusPanel.expressionLabel&&e.getSource()!=time) {  //事件源不是重新开始不是时间
+        if(e.getSource()!=jstatusPanel.expressionLabel/*&&e.getSource()!=time*/) {  //事件源不是重新开始不是时间
             jstatusPanel.startsTimer();
             int m=-1,n=-1; //点下时的坐标
             for(int i=0;i<row;i++) {
@@ -183,14 +184,14 @@ public  class MineArea extends JPanel implements ActionListener,MouseListener, A
                 e1.printStackTrace();
             }
         }
-        if(e.getSource()==time){  //累加时间
-            spendTime++;
-            try {
-                jstatusPanel.setTimerValue(spendTime);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
+//        if(e.getSource()==time){  //累加时间
+//            spendTime++;
+//            try {
+//                jstatusPanel.getLEDTime(spendTime);
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//        }
         inquireWin();
     }
 

@@ -94,7 +94,7 @@ public class MineGame extends JFrame implements ActionListener{
                 //mineArea.pNorth.setBorder();
             }
             if (e.getSource() == 高级) {
-                mineArea.initMineArea(22, 22, 99, 3);
+                mineArea.initMineArea(16, 30, 99, 3);
                 setBounds(100, 100, 627, 457);
                 //mineArea.pNorth.setBorder();
             }
@@ -104,7 +104,7 @@ public class MineGame extends JFrame implements ActionListener{
         }*/
             if (e.getSource() == 自定义雷区) {
                 c = new Custom();
-                c.mineArea = mineArea;
+                //c.mineArea = mineArea;
                 c.setVisible(true);
             }
             if (e.getSource() == 扫雷英雄榜) {

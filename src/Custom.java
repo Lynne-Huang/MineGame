@@ -60,9 +60,7 @@ public class Custom extends JDialog implements ActionListener{
 
         }
         if(e.getSource()==concel){
-            textlength.setText("");
-            texthigh.setText("");
-            textmine.setText("");
+            this.dispose();
         }
     }
 
