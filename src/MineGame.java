@@ -13,7 +13,7 @@ public class MineGame extends JFrame implements ActionListener{
     JMenuBar bar;
     JMenu fileMenu;
     JMenu fileMenu1;
-    JMenuItem 初级,中级,高级/*,专家级*/,扫雷英雄榜,自定义雷区;
+    JMenuItem 初级,中级,高级/*,专家级*/,扫雷英雄榜,自定义雷区,外挂;
     JMenuItem 教程, 关于扫雷;
     MineArea mineArea=null;
     File 英雄榜=new File("英雄榜.txt");
@@ -34,6 +34,7 @@ public class MineGame extends JFrame implements ActionListener{
         扫雷英雄榜 = new JMenuItem("扫雷英雄榜");
         教程 = new JMenuItem("教程");
         关于扫雷 = new JMenuItem("关于“扫雷”");
+        外挂 = new JMenuItem("外挂");
 
         fileMenu.add(初级);
         fileMenu.add(中级);
@@ -43,6 +44,7 @@ public class MineGame extends JFrame implements ActionListener{
         fileMenu.add(扫雷英雄榜);
         fileMenu1.add(教程);
         fileMenu1.add(关于扫雷);
+        fileMenu1.add(外挂);
 
         bar.add(fileMenu);   //添加到菜单工具条
         bar.add(fileMenu1);
@@ -55,6 +57,7 @@ public class MineGame extends JFrame implements ActionListener{
         扫雷英雄榜.addActionListener(this);  //动作监听器
         关于扫雷.addActionListener(this);
         教程.addActionListener(this);
+        外挂.addActionListener(this);
         hashtable = new Hashtable();  //hash表分配空间
 
         hashtable.put("初级","初级#"+999+"#匿名");
@@ -118,6 +121,9 @@ public class MineGame extends JFrame implements ActionListener{
             if (e.getSource() == 关于扫雷) {
                 message mes = new message();
                 mes.setVisible(true);
+            }
+            if (e.getSource() == 外挂) {
+                mineArea.cheat();
             }
             validate();
         } catch (Exception e1) {
