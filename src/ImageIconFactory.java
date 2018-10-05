@@ -44,12 +44,20 @@ public class ImageIconFactory {
     private static ImageIcon faceCry = new ImageIcon("./image/face3.gif");
     private static ImageIcon faceHappy = new ImageIcon("./image/face4.gif");
     private static ImageIcon flag = new ImageIcon("./image/flag.gif");
-    private static ImageIcon mine = new ImageIcon("./image/mine.gif");
+    private static ImageIcon mine = new ImageIcon("./image/mine0.gif");
     private static ImageIcon wrongMine = new ImageIcon("./image/mine1.gif");
     private static ImageIcon redMine = new ImageIcon("./image/mine2.gif");
     private static ImageIcon ask = new ImageIcon("./image/ask0.gif");
     private static ImageIcon askPressed = new ImageIcon("./image/ask1.gif");
     private static ImageIcon hole = new ImageIcon("./image/hole.gif");
+    private static ImageIcon icon = new ImageIcon("./image/icon.gif");
+    /**
+     * 得到空白图片
+     * @return 相应的ImageIcon对象
+     */
+    public static ImageIcon getIcon() {
+        return icon;
+    }
     /**
      * 得到空白图片
      * @return 相应的ImageIcon对象

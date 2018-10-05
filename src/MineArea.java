@@ -192,4 +192,17 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
     public void mouseClicked(MouseEvent e){}
+
+    public void cheat(){
+        for(int i=0;i<row;i++) {
+            for(int j=0;j<colum;j++) {
+                if(block[i][j].isMine){
+                    blockView[i][j].seeBlockNameOrIcon();
+                }
+//                if(!block[i][j].isMine){
+//                    blockView[i][j].seeBlockNameOrIcon();
+//                }
+            }
+        }
+    }
 }
