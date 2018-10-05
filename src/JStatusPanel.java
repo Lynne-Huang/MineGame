@@ -73,7 +73,11 @@ public class JStatusPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        ledTimer.setNumber(ledTimer.getNumber() + 1);
+        try {
+            ledTimer.setNumber(ledTimer.getNumber() + 1);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
         if (ledTimer.getNumber() == 999) {
             // 停止计数器
             timer.stop();
@@ -205,7 +209,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
     /**
      * 设置计时器的时间
      */
-    private void setTimerValue(int n) {
+    private void setTimerValue(int n) throws Exception {
         ledTimer.setNumber(0);
     }
 
@@ -226,7 +230,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
     /**
      * 重置计时器
      */
-    public void resetTimer() {
+    public void resetTimer() throws Exception {
         timer.stop();
         setTimerValue(0);
 
@@ -238,7 +242,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
      * @param count
      *            剩余雷数
      */
-    public void setLEDMineCountLeft(int count) {
+    public void setLEDMineCountLeft(int count) throws Exception {
         ledMineCountLeft.setNumber(count);
     }
 
