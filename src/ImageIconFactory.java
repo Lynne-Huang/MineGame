@@ -1,6 +1,7 @@
+
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import java.awt.*;
 
 /**
  * 图像资源的工厂类
@@ -37,7 +38,8 @@ public class ImageIconFactory {
             led6, led7, led8, led9 };
     private static ImageIcon led10 = new ImageIcon("./image/d10.gif");
     private static ImageIcon faceSmile = new ImageIcon("./image/face0.gif");
-    private static ImageIcon faceSmilePressed = new ImageIcon("./image/face1.gif");
+    private static ImageIcon faceSmilePressed = new ImageIcon(
+            "./image/face1.gif");
     private static ImageIcon faceSurprised = new ImageIcon("./image/face2.gif");
     private static ImageIcon faceCry = new ImageIcon("./image/face3.gif");
     private static ImageIcon faceHappy = new ImageIcon("./image/face4.gif");
@@ -48,8 +50,6 @@ public class ImageIconFactory {
     private static ImageIcon ask = new ImageIcon("./image/ask0.gif");
     private static ImageIcon askPressed = new ImageIcon("./image/ask1.gif");
     private static ImageIcon hole = new ImageIcon("./image/hole.gif");
-    private static ImageIcon schoolIcon = new ImageIcon("./image/schoolicon.jpg");
-    private static ImageIcon Icon = new ImageIcon("./image/icon.gif");
     /**
      * 得到空白图片
      * @return 相应的ImageIcon对象
@@ -135,7 +135,6 @@ public class ImageIconFactory {
     public static ImageIcon getFaceSmile() {
         return faceSmile;
     }
-
     /**
      * 得到表情按下的微笑图片
      * @return 相应的ImageIcon对象
@@ -171,13 +170,5 @@ public class ImageIconFactory {
     public static Icon getDot() {
         return hole;
     }
-    /**
-     * 得到校徽图片
-     * @return 相应的ImageIcon对象
-     */
-    public static Icon getSchoolIcon(){return schoolIcon;}
-
-    public static Icon getIcon(){return Icon;}
-
 
 }

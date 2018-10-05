@@ -3,8 +3,6 @@ public class JMineSweeperFrame {
     public static void leftButtonPressedOnMineBlock() {
     }
 
-//    public void resetGame() {
-//        mineArea.initMineArea(mineArea.getRow(),mineArea.getColum(),mineArea.getMineCount(),mineArea.getGrade());
-//
-//    }
+    public void resetGame() {
+    }
 }

@@ -1,7 +1,23 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
+
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 
 
@@ -15,9 +31,9 @@ public class JStatusPanel extends JPanel implements ActionListener {
     private int leftMineCount;
     private JLED ledTimer = new JLED();
     private JLED ledMineCountLeft = new JLED();
-    public JLabel expressionLabel = new JLabel(ImageIconFactory.getFaceSmile());
+    private JLabel expressionLabel = new JLabel(ImageIconFactory.getFaceSmile());
     private Timer timer = new Timer(1000, this);
-//    private MouseListener expressionLabelListener = new ExpressionListener();
+    private MouseListener expressionLabelListener = new ExpressionListener();
     private JMineSweeperFrame mineSweeperFrame;
 
     /**
@@ -55,15 +71,12 @@ public class JStatusPanel extends JPanel implements ActionListener {
      * 计时器的监听处理方法 当计时器的数字为999时停止计时器
      */
     @Override
-    public void actionPerformed(ActionEvent e)  {
-        try {
-            ledTimer.setNumber(ledTimer.getNumber() + 1);
-            if (ledTimer.getNumber() == 999) {
-                // 停止计数器
-                timer.stop();
-            }
-        }catch (Exception e1){
-            e1.printStackTrace();
+    public void actionPerformed(ActionEvent e) {
+
+        ledTimer.setNumber(ledTimer.getNumber() + 1);
+        if (ledTimer.getNumber() == 999) {
+            // 停止计数器
+            timer.stop();
         }
     }
 
@@ -90,10 +103,59 @@ public class JStatusPanel extends JPanel implements ActionListener {
         this.add(ledTimer);
         this.add(Box.createHorizontalStrut(5));
         this.setDelay(1000);
-//        this.expressionLabel.addMouseListener(new ExpressionListener());
+        this.expressionLabel.addMouseListener(new ExpressionListener());
     }
 
-    public boolean isPressed;
+    private boolean isPressed;
+
+    /**
+     * 表情的鼠标监听器
+     *
+     * @author Kerence
+     *
+     */
+    private class ExpressionListener extends MouseAdapter {
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if (expressionLabel == e.getSource() && isPressed) {
+                expressionLabel.setIcon(ImageIconFactory.getFaceSmilePressed());
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            if (isPressed && e.getSource() == expressionLabel) {
+                expressionLabel.setIcon(ImageIconFactory.getFaceSmile());
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getButton() != MouseEvent.BUTTON1) {
+                return;
+            }
+            if (e.getSource() == expressionLabel) {
+                isPressed = true;
+                expressionLabel.setIcon(ImageIconFactory.getFaceSmilePressed());
+            } else {
+                mineSweeperFrame.leftButtonPressedOnMineBlock();
+            }
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if (isPressed && e.getSource() == expressionLabel) {
+                isPressed = false;
+                // 重置游戏
+
+                mineSweeperFrame.resetGame();// 重置雷数和雷阵
+            }
+            expressionLabel.setIcon(ImageIconFactory.getFaceSmile());
+        }
+
+    }
 
     /**
      * 设置延迟时间
@@ -103,7 +165,6 @@ public class JStatusPanel extends JPanel implements ActionListener {
      */
     public void setDelay(int delay) {
         timer.setDelay(delay);
-
     }
 
     /**
@@ -144,7 +205,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
     /**
      * 设置计时器的时间
      */
-    public void setTimerValue(int n) throws Exception{
+    private void setTimerValue(int n) {
         ledTimer.setNumber(0);
     }
 
@@ -165,19 +226,19 @@ public class JStatusPanel extends JPanel implements ActionListener {
     /**
      * 重置计时器
      */
-    public void resetTimer() throws Exception{
+    public void resetTimer() {
         timer.stop();
         setTimerValue(0);
 
     }
 
-  /**
+    /**
      * 设置剩余雷数的显示值
      *
      * @param count
      *            剩余雷数
      */
-    public void setLEDMineCountLeft(int count) throws Exception{
+    public void setLEDMineCountLeft(int count) {
         ledMineCountLeft.setNumber(count);
     }
 
@@ -185,9 +246,8 @@ public class JStatusPanel extends JPanel implements ActionListener {
      * 得到计时器的显示值
      *
      * @return 计时器的值
-     * @param spendTime
      */
-    public int getLEDTime(int spendTime) {
+    public int getLEDTime() {
         return ledTimer.getNumber();
     }
 }

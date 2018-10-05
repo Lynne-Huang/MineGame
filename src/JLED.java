@@ -1,9 +1,14 @@
+
+
+import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.BevelBorder;
+
 
 
 /**
@@ -26,7 +31,7 @@ public class JLED extends Box {
         //允许垂直或水平布置多个组件，Y_AXIS是指定从上到下垂直布置组件。
 
         for (int i = 0; i < integerPlace.length; i++) {
-            integerPlace[i] = new JLabel(new ImageIcon(String.valueOf(ImageIconFactory.getNumber(0))));
+            integerPlace[i] = new JLabel(new ImageIcon("./image/d0.gif"));
             this.add(integerPlace[i]);
         }
         this.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
@@ -38,9 +43,8 @@ public class JLED extends Box {
      *
      * @param second
      *            数字的值 只能在-999和999之间
-     * @throws LEDException
      */
-    public void setNumber(int second) throws LEDException {
+    public void setNumber(int second) throws Exception{
         if (second > 999 || second < -999) {
             throw new LEDException("数字超出范围");
         }
@@ -52,9 +56,8 @@ public class JLED extends Box {
      * 显示数字
      *
      * @param number
-     * @throws LEDException
      */
-    private void showNumber(int number) throws LEDException {
+    private void showNumber(int number) throws Exception{
         if (number > 999 || number < -999) {
             throw new LEDException("数字超出范围");
         }
@@ -70,8 +73,8 @@ public class JLED extends Box {
         }
 
         for (int i = str.length(); i > 0; i--) {
-             this.integerPlace[digit].setIcon(new ImageIcon("./image/d"
-             + Integer.parseInt(str.charAt(i - 1) + "") + ".gif"));
+            // this.integerPlace[digit].setIcon(new ImageIcon("./image/d"
+            // + Integer.parseInt(str.charAt(i - 1) + "") + ".gif"));
             this.integerPlace[digit].setIcon(ImageIconFactory.getLed(Integer
                     .parseInt(str.charAt(i - 1) + "")));
             digit--;
@@ -83,7 +86,7 @@ public class JLED extends Box {
      */
     private void resetDisplay() {
         for (int i = 0; i < 3; i++)
-            this.integerPlace[i].setIcon(new ImageIcon(String.valueOf(ImageIconFactory.getNumber(0))));
+            this.integerPlace[i].setIcon(new ImageIcon("./image/d0.gif"));
     }
 
     /**
