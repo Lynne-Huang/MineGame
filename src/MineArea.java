@@ -11,9 +11,11 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
     int row,colum,mineCount,markMount;//雷区的行数、列数以及地雷个数和用户给出的标记数
     ImageIcon mark;
     int grade;
-    JPanel pCenter,pNorth;
+//    JPanel pCenter/*,pNorth*/;
     JTextField showTime,showMarkedMineCount; //显示用时以及标记数
     Timer time;  //计时器
+    JStatusPanel jStatusPanel = new JStatusPanel();
+    JBlockPanel jBlockPanel = new JBlockPanel();
     int spendTime=0;
     Record record;
 
@@ -28,24 +30,25 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
         showMarkedMineCount.setHorizontalAlignment(JTextField.CENTER);
         showMarkedMineCount.setFont(new Font("Arial",Font.BOLD,16));
         showTime.setFont(new Font("Arial",Font.BOLD,16));
-        pCenter=new JPanel();
-        pNorth=new JPanel();
+//        pCenter=new JPanel();
+//        pNorth=new JPanel();
         lay=new LayMines();
         initMineArea(row,colum,mineCount,grade); //初始化雷区,见下面的LayMines()
         reStart.addActionListener(this);
-        pNorth.add(showMarkedMineCount);
-        pNorth.add(reStart);
-        pNorth.add(showTime);
+//        pNorth.add(showMarkedMineCount);
+//        pNorth.add(reStart);
+//        pNorth.add(showTime);
         setLayout(new BorderLayout());
-        add(pNorth,BorderLayout.NORTH);
-        add(pCenter,BorderLayout.CENTER);
+        add(jStatusPanel,BorderLayout.NORTH);
+        add(jBlockPanel,BorderLayout.CENTER);
 
     }
 
 
 
     public void initMineArea(int row,int colum,int mineCount,int grade){
-        pCenter.removeAll();
+//        pCenter.removeAll();
+        jBlockPanel.removeAll();
         spendTime=0;
         markMount=mineCount;
         this.row=row;
@@ -59,12 +62,14 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
         }
         lay.layMinesForBlock(block,mineCount);
         blockView=new BlockView[row][colum];
-        pCenter.setLayout(new GridLayout(row,colum));
+        jBlockPanel.setLayout(new GridLayout(row,colum));
+//        pCenter.setLayout(new GridLayout(row,colum));
         for(int i=0;i<row;i++) {
             for(int j=0;j<colum;j++) {
                 blockView[i][j]=new BlockView();
                 blockView[i][j].giveView(block[i][j]); //给block[i][j]提供视图
-                pCenter.add(blockView[i][j]);
+                jBlockPanel.add(blockView[i][j]);
+//                pCenter.add(blockView[i][j]);
                 blockView[i][j].getBlockCover().addActionListener(this);
                 blockView[i][j].getBlockCover().addMouseListener(this);
                 blockView[i][j].seeBlockCover();

@@ -11,7 +11,7 @@ import java.awt.*;
 public class JBlockPanel extends JPanel{
     public JBlockPanel(){
         Border bevelBorder = BorderFactory
-                .createBevelBorder(BevelBorder.RAISED);
+                .createBevelBorder(BevelBorder.LOWERED);
 
         //this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         this.setBackground(Color.LIGHT_GRAY);

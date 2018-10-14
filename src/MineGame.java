@@ -20,6 +20,7 @@ public class MineGame extends JFrame implements ActionListener{
     JMenu fileMenu1;
     JMenuItem 初级,中级,高级,专家级,扫雷英雄榜,自定义雷区;
     JMenuItem 外挂,关于扫雷,教程;
+
     MineArea mineArea=null;
     File 英雄榜=new File("英雄榜.txt");
     Hashtable hashtable=null;
