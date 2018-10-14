@@ -8,7 +8,7 @@ import javax.swing.*;
 public class LayMines{
     ImageIcon mineIcon;
     LayMines() {
-        mineIcon=new ImageIcon("mine.gif");
+        mineIcon=new ImageIcon(String.valueOf(ImageIconFactory.getMine()));
     }
     public void layMinesForBlock(Block block[][],int mineCount){
         int row=block.length;

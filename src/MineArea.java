@@ -201,6 +201,7 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
     public void cheat(){
         for(int i=0;i<row;i++) {
             for(int j=0;j<colum;j++) {
+                // blockView[i][j].seeBlockNameOrIcon();
                 if(block[i][j].isMine){
                     blockView[i][j].seeBlockNameOrIcon();
                 }

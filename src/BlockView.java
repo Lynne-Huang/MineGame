@@ -18,10 +18,15 @@ public class BlockView extends JPanel{
     BlockView(){
         card=new CardLayout();
         setLayout(card);
-        blockNameOrIcon=new JLabel("",JLabel.CENTER);
+        blockNameOrIcon=new JLabel(ImageIconFactory.getBlank(),JLabel.CENTER);
         blockNameOrIcon.setHorizontalTextPosition(AbstractButton.CENTER);
         blockNameOrIcon.setVerticalTextPosition(AbstractButton.CENTER);
         blockCover=new JButton();
+        blockCover=new JButton(ImageIconFactory.getBlank());//隐藏jbutton，显示为图标
+        blockCover.setBackground(Color.LIGHT_GRAY);
+        blockCover.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        //blockCover.setBorderPainted(false);
+//        blockCover.setContentAreaFilled(false);
         add("cover",blockCover);
         add("view",blockNameOrIcon);
     }
@@ -33,9 +38,11 @@ public class BlockView extends JPanel{
         else {
             int n=block.getAroundMineNumber();
             if(n>=1)
-                blockNameOrIcon.setText(""+n);
+                blockNameOrIcon.setIcon(ImageIconFactory.getNumber(n));
+//                blockNameOrIcon.setText(""+n);
             else
-                blockNameOrIcon.setText(" ");
+//                blockNameOrIcon.setText(" ");
+                blockNameOrIcon.setIcon(ImageIconFactory.getBlankPressed());
         }
     }
     public void seeBlockNameOrIcon(){

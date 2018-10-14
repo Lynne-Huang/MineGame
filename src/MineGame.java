@@ -61,6 +61,11 @@ public class MineGame extends JFrame implements ActionListener{
         高级.addActionListener(this);
         专家级.addActionListener(this);
         扫雷英雄榜.addActionListener(this);
+        自定义雷区.addActionListener(this);
+        教程.addActionListener(this);
+        外挂.addActionListener(this);
+        关于扫雷.addActionListener(this);
+
         hashtable=new Hashtable();
 
         hashtable.put("初级","初级#"+999+"#匿名");
