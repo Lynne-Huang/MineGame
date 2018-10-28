@@ -9,12 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -31,8 +26,8 @@ public class JStatusPanel extends JPanel implements ActionListener {
     private int leftMineCount;
     private JLED ledTimer = new JLED();
     private JLED ledMineCountLeft = new JLED();
-    private JLabel expressionLabel = new JLabel(ImageIconFactory.getFaceSmile());
-    private Timer timer = new Timer(1000, this);
+    public JButton expressionLabel = new JButton(ImageIconFactory.getFaceSmile());
+    public Timer timer = new Timer(1000, this);
     private MouseListener expressionLabelListener = new ExpressionListener();
     private JMineSweeperFrame mineSweeperFrame;
 
@@ -91,7 +86,9 @@ public class JStatusPanel extends JPanel implements ActionListener {
         // ledTimerPanel.setBackground(Color.green);
         // expressionPanel.setBackground(Color.blue);
         // ledMineCountPanel.setBackground(Color.pink);
-
+//        expressionLabel.setContentAreaFilled(false);
+        expressionLabel.setBorder(null);//边界隐藏，就只会显示图标的样子了
+//        expressionLabel.setSize(ImageIconFactory.getFaceSmile().getIconWidth(),ImageIconFactory.getFaceSmile().getIconHeight());
         Border bevelBorder = BorderFactory
                 .createBevelBorder(BevelBorder.LOWERED);
         this.setBackground(Color.LIGHT_GRAY);
@@ -100,6 +97,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(100, 47));
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.add(Box.createHorizontalStrut(5));// 填充不了哦。
+
         this.add(ledMineCountLeft);
         this.add(Box.createHorizontalGlue());
         this.add(expressionLabel);
@@ -154,7 +152,7 @@ public class JStatusPanel extends JPanel implements ActionListener {
                 isPressed = false;
                 // 重置游戏
 
-                mineSweeperFrame.resetGame();// 重置雷数和雷阵
+//                mineSweeperFrame.resetGame();// 重置雷数和雷阵
             }
             expressionLabel.setIcon(ImageIconFactory.getFaceSmile());
         }
@@ -185,12 +183,6 @@ public class JStatusPanel extends JPanel implements ActionListener {
         timer.stop();
     }
 
-    /**
-     * 启动计时器
-     */
-    public void startsTimer() {
-        timer.start();
-    }
 
     /**
      * 设置表情为哭
@@ -212,14 +204,6 @@ public class JStatusPanel extends JPanel implements ActionListener {
     private void setTimerValue(int n) throws Exception {
         ledTimer.setNumber(0);
     }
-
-    /**
-     * 停止计时器
-     */
-    public void stopTimer() {
-        this.timer.stop();
-    }
-
     /**
      * 设置表情为微笑
      */
@@ -246,12 +230,4 @@ public class JStatusPanel extends JPanel implements ActionListener {
         ledMineCountLeft.setNumber(count);
     }
 
-    /**
-     * 得到计时器的显示值
-     *
-     * @return 计时器的值
-     */
-    public int getLEDTime() {
-        return ledTimer.getNumber();
-    }
 }

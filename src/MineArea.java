@@ -1,40 +1,44 @@
+import com.sun.javafx.image.BytePixelSetter;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 
 public class MineArea extends JPanel implements ActionListener,MouseListener{
-    JButton reStart;
+//    JButton reStart;
     Block [][] block;
     BlockView [][] blockView;
     LayMines lay;
     int row,colum,mineCount,markMount;//雷区的行数、列数以及地雷个数和用户给出的标记数
-    ImageIcon mark;
+//    ImageIcon mark;
     int grade;
 //    JPanel pCenter/*,pNorth*/;
-    JTextField showTime,showMarkedMineCount; //显示用时以及标记数
+//    JTextField /*showTime,*/showMarkedMineCount; //显示用时以及标记数
     Timer time;  //计时器
     JStatusPanel jStatusPanel = new JStatusPanel();
     JBlockPanel jBlockPanel = new JBlockPanel();
-    int spendTime=0;
+//    int spendTime=0;
     Record record;
 
 
-    public MineArea(int row,int colum,int mineCount,int grade) {
-        reStart=new JButton("重新开始");
-        mark=new ImageIcon("mark.gif");  //探雷标记
-        time=new Timer(1000,this);
-        showTime=new JTextField(5);
-        showMarkedMineCount=new JTextField(5);
-        showTime.setHorizontalAlignment(JTextField.CENTER);
-        showMarkedMineCount.setHorizontalAlignment(JTextField.CENTER);
-        showMarkedMineCount.setFont(new Font("Arial",Font.BOLD,16));
-        showTime.setFont(new Font("Arial",Font.BOLD,16));
+    public MineArea(int row,int colum,int mineCount,int grade) throws Exception {
+//        reStart=new JButton("重新开始");
+//        mark=new ImageIcon("mark.gif");  //探雷标记
+        time=jStatusPanel.timer;//new Timer(1000,this);
+//        showTime=new JTextField(5);
+//        showMarkedMineCount=new JTextField(5);
+//        showTime.setHorizontalAlignment(JTextField.CENTER);
+//        showMarkedMineCount.setHorizontalAlignment(JTextField.CENTER);
+//        showMarkedMineCount.setFont(new Font("Arial",Font.BOLD,16));
+//        showTime.setFont(new Font("Arial",Font.BOLD,16));
 //        pCenter=new JPanel();
 //        pNorth=new JPanel();
         lay=new LayMines();
         initMineArea(row,colum,mineCount,grade); //初始化雷区,见下面的LayMines()
-        reStart.addActionListener(this);
+        jStatusPanel.expressionLabel.addMouseListener(this);
+//        reStart.addActionListener(this);
 //        pNorth.add(showMarkedMineCount);
 //        pNorth.add(reStart);
 //        pNorth.add(showTime);
@@ -46,10 +50,10 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
 
 
 
-    public void initMineArea(int row,int colum,int mineCount,int grade){
+    public void initMineArea(int row,int colum,int mineCount,int grade) throws Exception {
 //        pCenter.removeAll();
         jBlockPanel.removeAll();
-        spendTime=0;
+//        spendTime=0;
         markMount=mineCount;
         this.row=row;
         this.colum=colum;
@@ -77,7 +81,8 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                 blockView[i][j].getBlockCover().setIcon(null);
             }
         }
-        showMarkedMineCount.setText(""+markMount);
+        jStatusPanel.setLEDMineCountLeft(markMount);
+//        showMarkedMineCount.setText(""+markMount);
         validate();
     }
     public void setRow(int row){
@@ -93,8 +98,9 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
         this.grade=grade;
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()!=reStart&&e.getSource()!=time) {
-            time.start();
+        if(e.getSource()!=jStatusPanel.expressionLabel&&e.getSource()!=time) {
+//            time.start();
+            jStatusPanel.setTimerStart();
             int m=-1,n=-1;
             for(int i=0;i<row;i++) {
                 for(int j=0;j<colum;j++) {
@@ -113,22 +119,32 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                             blockView[i][j].seeBlockNameOrIcon();
                     }
                 }
-                time.stop();
-                spendTime=0;
+                jStatusPanel.setTimerStop();
+                jStatusPanel.setFaceCry();
+//                spendTime=0;
                 markMount=mineCount;
             }
             else {
+                jStatusPanel.setFaceSurprised();
                 show(m,n);          //见本类后面的show方法
             }
         }
-        if(e.getSource()==reStart) {
-            initMineArea(row,colum,mineCount,grade);
+        if(e.getSource()==jStatusPanel.expressionLabel) {
+            try {
+                initMineArea(row,colum,mineCount,grade);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
-        if(e.getSource()==time){
-            spendTime++;
-            showTime.setText(""+spendTime);
+//        if(e.getSource()==time){
+//            spendTime++;
+//            showTime.setText(""+spendTime);
+//        }
+        try {
+            inquireWin();
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
-        inquireWin();
     }
 
     public void show(int m,int n) {
@@ -146,29 +162,7 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
             }
         }
     }
-    public void mousePressed(MouseEvent e){
-        JButton source=(JButton)e.getSource();
-        for(int i=0;i<row;i++) {
-            for(int j=0;j<colum;j++) {
-                if(e.getModifiers()==InputEvent.BUTTON3_MASK&&
-                        source==blockView[i][j].getBlockCover()){
-                    if(block[i][j].getIsMark()) {
-                        source.setIcon(null);
-                        block[i][j].setIsMark(false);
-                        markMount=markMount+1;
-                        showMarkedMineCount.setText(""+markMount);
-                    }
-                    else{
-                        source.setIcon(mark);
-                        block[i][j].setIsMark(true);
-                        markMount=markMount-1;
-                        showMarkedMineCount.setText(""+markMount);
-                    }
-                }
-            }
-        }
-    }
-    public void inquireWin(){
+    public boolean inquireWin() throws Exception {
         int number=0;
         for(int i=0;i<row;i++) {
             for(int j=0;j<colum;j++) {
@@ -177,7 +171,9 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
             }
         }
         if(number==mineCount){
-            time.stop();
+//            time.stop();
+            jStatusPanel.setTimerStop();
+            jStatusPanel.setFaceHappy();
             record=new Record();
             switch(grade){
                 case 1: record.setGrade("初级");
@@ -187,17 +183,19 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                 case 3: record.setGrade("高级");
                     break;
             }
-            record.setTime(spendTime);
+            jStatusPanel.setLEDMineCountLeft(markMount);
+            record.setTime(jStatusPanel.getTimerValue());
+//            record.setTime(spendTime);
             record.setVisible(true);
+            return true;
         }
+//            jStatusPanel.setFaceCry();
+
+            jStatusPanel.setLEDMineCountLeft(markMount);
+        return false;
 
 
     }
-    public void mouseReleased(MouseEvent e){}
-    public void mouseEntered(MouseEvent e){}
-    public void mouseExited(MouseEvent e){}
-    public void mouseClicked(MouseEvent e){}
-
     public void cheat(){
         for(int i=0;i<row;i++) {
             for(int j=0;j<colum;j++) {
@@ -211,4 +209,103 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
             }
         }
     }
+    public void mousePressed(MouseEvent e){
+        JButton source=(JButton)e.getSource();
+        if(e.getSource() == jStatusPanel.expressionLabel)//按笑脸
+            try{
+            initMineArea(row,colum,mineCount,grade);
+            jStatusPanel.resetTimer();
+            }catch (Exception e1){
+                e1.printStackTrace();
+            }
+        for(int i=0;i<row;i++) {
+            for(int j=0;j<colum;j++) {//BUTTON1_MASK左击
+                if(e.getSource()!=jStatusPanel.expressionLabel&&
+                        e.getModifiers() ==InputEvent.BUTTON1_MASK
+                        && source == blockView[i][j].getBlockCover()) {
+//                    blockView[i][j].blockCover.setIcon(ImageIconFactory.getBlankPressed());
+                    blockView[i][j].blockCover.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+                    jStatusPanel.setFaceSurprised();
+                    jStatusPanel.setTimerStart();
+                    int m = -1, n = -1;
+                    if (e.getSource() == blockView[i][j].getBlockCover()) {
+                        m = i;
+                        n = j;
+                        break;
+                    }
+                    if (block[m][n].isMine()) {
+                        for(int r=0;r<row;r++) {
+                            for (int c = 0; c < colum; c++) {
+                                blockView[r][c].getBlockCover().setEnabled(false);
+                                if (block[r][c].isMine()) {
+                                    blockView[r][c].seeBlockNameOrIcon();
+                                    jStatusPanel.setFaceCry();
+                                    jStatusPanel.setTimerStop();
+
+                                }
+                            }
+                        }
+
+//                spendTime=0;
+                        markMount=mineCount;
+                    }
+                    else {
+
+                        show(m,n);          //见本类后面的show方法
+                    }
+                }
+                if(e.getModifiers()==InputEvent.BUTTON3_MASK&&
+                        source==blockView[i][j].getBlockCover()){//BUTTON3_MASK左击
+                    jStatusPanel.setFaceSurprised();
+                    if(block[i][j].getIsMark()) {
+                        jStatusPanel.setFaceSurprised();
+                        source.setIcon(null);
+                        block[i][j].setIsMark(false);
+                        markMount=markMount+1;
+                        try {
+                            jStatusPanel.setLEDMineCountLeft(markMount);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+//                        showMarkedMineCount.setText(""+markMount);
+                    }
+                    else{
+                        source.setIcon(ImageIconFactory.getFlag());
+                        jStatusPanel.setFaceSurprised();
+                        block[i][j].setIsMark(true);
+                        markMount=markMount-1;
+                        try {
+                            jStatusPanel.setLEDMineCountLeft(markMount);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+//                        showMarkedMineCount.setText(""+markMount);
+                    }
+                }
+            }
+            try {
+                inquireWin();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public void mouseReleased(MouseEvent e){
+        try {
+            if(inquireWin())jStatusPanel.setFaceHappy();
+            else jStatusPanel.setFaceCry();
+            jStatusPanel.setFaceSmile();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
+    }
+
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mouseClicked(MouseEvent e){}
+
+
 }
