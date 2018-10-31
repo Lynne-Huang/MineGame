@@ -1,7 +1,6 @@
-import java.awt.*;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 /*
 * 展示关于“扫雷”
 */
@@ -19,7 +18,7 @@ public class message extends JDialog implements ActionListener {
         setModal(true);
 
         JLabel l1=new JLabel("");
-        JLabel l2=new JLabel("欢迎进入游戏");
+        JLabel l2=new JLabel("38115307 黄景琳制作");
 
         关闭=new JButton("关闭");
         关闭.addActionListener(this);

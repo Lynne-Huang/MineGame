@@ -11,6 +11,13 @@ public class Block {
     boolean isMine=false;   //是否是雷
     boolean isMark=false; //是否被标记
     boolean isOpen=false;   //是否被挖开
+    private int rightClickCount;
+    public int getRightClickCount() {
+        return rightClickCount;
+    }
+    public void setRightClickCount(int rightClickCount) {
+        this.rightClickCount = rightClickCount;
+    }
     public void setName(String name) {
         this.name=name;
     }

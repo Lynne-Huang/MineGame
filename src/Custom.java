@@ -1,8 +1,7 @@
-import java.io.*;
-import java.util.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 public class Custom extends JDialog implements ActionListener{
     public MineArea mineArea;
     JLabel length,high,mine;
@@ -12,10 +11,11 @@ public class Custom extends JDialog implements ActionListener{
 
     public Custom() {
         setTitle("自定义雷区");
-        setBounds(100,100,140,160);
+        setBounds(100,100,244,193);
         setVisible(true);
         setResizable(false);
         setModal(true);
+        setLayout(new GridLayout(2,1));
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         JPanel p=new JPanel();
         length=new JLabel("长度：");
@@ -37,6 +37,7 @@ public class Custom extends JDialog implements ActionListener{
 
         confirm.addActionListener(this);
         concel.addActionListener(this);
+
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
@@ -56,6 +57,12 @@ public class Custom extends JDialog implements ActionListener{
 
             else if(A<=22&&B<=22){
                 D=3;
+            }
+            try {
+                mineArea.initMineArea(A,B,C,D);
+                setBounds(100,100,A*2,B*2);
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
 
         }

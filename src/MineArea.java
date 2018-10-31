@@ -1,13 +1,11 @@
-import com.sun.javafx.image.BytePixelSetter;
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
 
 
 public class MineArea extends JPanel implements ActionListener,MouseListener{
 //    JButton reStart;
+
     Block [][] block;
     BlockView [][] blockView;
     LayMines lay;
@@ -53,6 +51,7 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
     public void initMineArea(int row,int colum,int mineCount,int grade) throws Exception {
 //        pCenter.removeAll();
         jBlockPanel.removeAll();
+        jStatusPanel.setFaceSmile();
 //        spendTime=0;
         markMount=mineCount;
         this.row=row;
@@ -98,48 +97,61 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
         this.grade=grade;
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()!=jStatusPanel.expressionLabel&&e.getSource()!=time) {
-//            time.start();
-            jStatusPanel.setTimerStart();
-            int m=-1,n=-1;
-            for(int i=0;i<row;i++) {
-                for(int j=0;j<colum;j++) {
-                    if(e.getSource()==blockView[i][j].getBlockCover()){
-                        m=i;
-                        n=j;
-                        break;
-                    }
-                }
-            }
-            if(block[m][n].isMine()) {
-                for(int i=0;i<row;i++) {
-                    for(int j=0;j<colum;j++) {
-                        blockView[i][j].getBlockCover().setEnabled(false);
-                        if(block[i][j].isMine())
-                            blockView[i][j].seeBlockNameOrIcon();
-                    }
-                }
-                jStatusPanel.setTimerStop();
-                jStatusPanel.setFaceCry();
-//                spendTime=0;
-                markMount=mineCount;
-            }
-            else {
-                jStatusPanel.setFaceSurprised();
-                show(m,n);          //见本类后面的show方法
-            }
-        }
-        if(e.getSource()==jStatusPanel.expressionLabel) {
-            try {
-                initMineArea(row,colum,mineCount,grade);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
+//        if(e.getSource()!=jStatusPanel.expressionLabel&&e.getSource()!=time) {
+////            time.start();
+//            jStatusPanel.setTimerStart();
+//            int m=-1,n=-1;
+//            for(int i=0;i<row;i++) {
+//                for(int j=0;j<colum;j++) {
+//                    if(e.getSource()==blockView[i][j].getBlockCover()){
+//                        m=i;
+//                        n=j;
+//                        break;
+//                    }
+//                }
+//            }
+//            if(block[m][n].isMine()) {
+//                for(int i=0;i<row;i++) {
+//                    for(int j=0;j<colum;j++) {
+//                        blockView[i][j].getBlockCover().setEnabled(false);
+//                        if(block[i][j].isMine())
+//                            blockView[i][j].seeBlockNameOrIcon();
+//                    }
+//                }
+//                jStatusPanel.setTimerStop();
+//                jStatusPanel.setFaceCry();
+////                spendTime=0;
+//                markMount=mineCount;
+//            }
+//            else {
+//                jStatusPanel.setFaceSurprised();
+//                show(m,n);          //见本类后面的show方法
+//            }
+//        }
+//        if(e.getSource()==jStatusPanel.expressionLabel) {
+//            try {
+//                initMineArea(row,colum,mineCount,grade);
+//                jStatusPanel.setTimerStop();
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//        }
 //        if(e.getSource()==time){
 //            spendTime++;
 //            showTime.setText(""+spendTime);
 //        }
+        if(e.getSource() == jStatusPanel.expressionLabel){
+            try{
+                initMineArea(row,colum,mineCount,grade);
+            }catch (Exception e1){
+                e1.printStackTrace();
+            }
+            try {
+                jStatusPanel.setTimerStop();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
         try {
             inquireWin();
         } catch (Exception e1) {
@@ -182,6 +194,9 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                     break;
                 case 3: record.setGrade("高级");
                     break;
+                case 4:
+                    record.setGrade("自定义雷区");
+                    break;
             }
             jStatusPanel.setLEDMineCountLeft(markMount);
             record.setTime(jStatusPanel.getTimerValue());
@@ -196,12 +211,13 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
 
 
     }
+    //外挂显示扫雷
     public void cheat(){
         for(int i=0;i<row;i++) {
             for(int j=0;j<colum;j++) {
                 // blockView[i][j].seeBlockNameOrIcon();
                 if(block[i][j].isMine){
-                    blockView[i][j].seeBlockNameOrIcon();
+                    blockView[i][j].getBlockCover().setIcon(ImageIconFactory.getDot());
                 }
 //                if(!block[i][j].isMine){
 //                    blockView[i][j].seeBlockNameOrIcon();
@@ -209,102 +225,258 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
             }
         }
     }
+    boolean isDouble;
     public void mousePressed(MouseEvent e){
-        JButton source=(JButton)e.getSource();
-        if(e.getSource() == jStatusPanel.expressionLabel)//按笑脸
-            try{
-            initMineArea(row,colum,mineCount,grade);
-            jStatusPanel.resetTimer();
-            }catch (Exception e1){
-                e1.printStackTrace();
-            }
-        for(int i=0;i<row;i++) {
-            for(int j=0;j<colum;j++) {//BUTTON1_MASK左击
-                if(e.getSource()!=jStatusPanel.expressionLabel&&
-                        e.getModifiers() ==InputEvent.BUTTON1_MASK
-                        && source == blockView[i][j].getBlockCover()) {
+//        JButton source=(JButton)e.getSource();
+//        if(e.getSource() == jStatusPanel.expressionLabel)//按笑脸
+//            try{
+//            initMineArea(row,colum,mineCount,grade);
+//            jStatusPanel.resetTimer();
+//            }catch (Exception e1){
+//                e1.printStackTrace();
+//            }
+//        for(int i=0;i<row;i++) {
+//            for(int j=0;j<colum;j++) {//BUTTON1_MASK左击
+//                if(e.getSource()!=jStatusPanel.expressionLabel&&
+//                        e.getModifiers() ==InputEvent.BUTTON1_MASK
+//                        && source == blockView[i][j].getBlockCover()) {
 //                    blockView[i][j].blockCover.setIcon(ImageIconFactory.getBlankPressed());
-                    blockView[i][j].blockCover.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-                    jStatusPanel.setFaceSurprised();
-                    jStatusPanel.setTimerStart();
-                    int m = -1, n = -1;
-                    if (e.getSource() == blockView[i][j].getBlockCover()) {
-                        m = i;
-                        n = j;
-                        break;
-                    }
-                    if (block[m][n].isMine()) {
-                        for(int r=0;r<row;r++) {
-                            for (int c = 0; c < colum; c++) {
-                                blockView[r][c].getBlockCover().setEnabled(false);
-                                if (block[r][c].isMine()) {
-                                    blockView[r][c].seeBlockNameOrIcon();
-                                    jStatusPanel.setFaceCry();
-                                    jStatusPanel.setTimerStop();
+//                    blockView[i][j].blockCover.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+//                    jStatusPanel.setFaceSurprised();
+//                    jStatusPanel.setTimerStart();
+//                    int m = -1, n = -1;
+//                    if (e.getSource() == blockView[i][j].getBlockCover()) {
+//                        m = i;
+//                        n = j;
+//                        break;
+//                    }
+//                    if (block[m][n].isMine()) {
+//                        for(int r=0;r<row;r++) {
+//                            for (int c = 0; c < colum; c++) {
+//                                blockView[r][c].getBlockCover().setEnabled(false);
+//                                if (block[r][c].isMine()) {
+//                                    blockView[r][c].seeBlockNameOrIcon();
+//                                    jStatusPanel.setFaceCry();
+//                                    jStatusPanel.setTimerStop();
+//
+//                                }
+//                            }
+//                        }
+//
+////                spendTime=0;
+//                        markMount=mineCount;
+//                    }
+//                    else {
+//
+//                        show(m,n);          //见本类后面的show方法
+//                    }
+//                }
+//                if(e.getModifiers()==InputEvent.BUTTON3_MASK&&
+//                        source==blockView[i][j].getBlockCover()){//BUTTON3_MASK左击
+//                    jStatusPanel.setFaceSurprised();
+//                    if(block[i][j].getIsMark()) {
+//                        jStatusPanel.setFaceSurprised();
+//                        source.setIcon(null);
+//                        block[i][j].setIsMark(false);
+//                        markMount=markMount+1;
+//                        try {
+//                            jStatusPanel.setLEDMineCountLeft(markMount);
+//                        } catch (Exception e1) {
+//                            e1.printStackTrace();
+//                        }
+////                        showMarkedMineCount.setText(""+markMount);
+//                    }
+//                    else{
+//                        source.setIcon(ImageIconFactory.getFlag());
+//                        jStatusPanel.setFaceSurprised();
+//                        block[i][j].setIsMark(true);
+//                        markMount=markMount-1;
+//                        try {
+//                            jStatusPanel.setLEDMineCountLeft(markMount);
+//                        } catch (Exception e1) {
+//                            e1.printStackTrace();
+//                        }
+////                        showMarkedMineCount.setText(""+markMount);
+//                    }
+//                }
+//            }
+//            try {
+//                inquireWin();
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//        }
+        int d = e.getModifiersEx(); //返回此事件的修饰符掩码
+        int s = e.getModifiers();
+        JButton source=(JButton)e.getSource();
+        int m = -1 ,n = -1;
 
-                                }
-                            }
-                        }
-
-//                spendTime=0;
-                        markMount=mineCount;
-                    }
-                    else {
-
-                        show(m,n);          //见本类后面的show方法
-                    }
+        //获取当前资源位置
+        for(int i =0; i < row; i++){
+            for(int j=0; j < colum;j++){
+                if(e.getSource() ==blockView[i][j].getBlockCover()){
+                    m = i;
+                    n = j;
+                    break;
                 }
-                if(e.getModifiers()==InputEvent.BUTTON3_MASK&&
-                        source==blockView[i][j].getBlockCover()){//BUTTON3_MASK左击
-                    jStatusPanel.setFaceSurprised();
-                    if(block[i][j].getIsMark()) {
-                        jStatusPanel.setFaceSurprised();
-                        source.setIcon(null);
-                        block[i][j].setIsMark(false);
-                        markMount=markMount+1;
-                        try {
-                            jStatusPanel.setLEDMineCountLeft(markMount);
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-//                        showMarkedMineCount.setText(""+markMount);
-                    }
-                    else{
-                        source.setIcon(ImageIconFactory.getFlag());
-                        jStatusPanel.setFaceSurprised();
-                        block[i][j].setIsMark(true);
-                        markMount=markMount-1;
-                        try {
-                            jStatusPanel.setLEDMineCountLeft(markMount);
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-//                        showMarkedMineCount.setText(""+markMount);
-                    }
-                }
-            }
-            try {
-                inquireWin();
-            } catch (Exception e1) {
-                e1.printStackTrace();
             }
         }
 
+        //左右键按下
+        if(d == InputEvent.BUTTON1_DOWN_MASK + InputEvent.BUTTON3_DOWN_MASK){
+            for(int x = Math.max(m-1,0); x<= Math.min(m+1,8);x++){
+                for(int y =  Math.max(n - 1, 0); y <= Math.min(n+1,8);y++){
+                    if(!block[x][y].isMark && block[x][y].isOpen)
+                        blockView[x][y].blockCover.setIcon(ImageIconFactory.getNumber(0));
+                }
+            }
+            jStatusPanel.setFaceSurprised();
+            isDouble = true;
+        }
+        //按下右键
+        else if(s ==InputEvent.BUTTON1_MASK&& source == blockView[m][n].getBlockCover()){
+            if(e.getSource() == jStatusPanel.expressionLabel){
+                jStatusPanel.setFaceSmilePressed();
+            }
+            else if(!block[m][n].isMark){
+                jStatusPanel.setFaceSurprised();
+                blockView[m][n].blockCover.setIcon(ImageIconFactory.getBlankPressed());
+            }
+        }
+        //按下右键2次
+        else if (s == InputEvent.BUTTON1_MASK && !block[m][n].isOpen) {
+            int count = block[m][n].getRightClickCount();
+            count++;
+
+            if(count == 1){
+                source.setIcon(ImageIconFactory.getFlag());
+                block[m][n].setRightClickCount(count);
+                block[m][n].setIsMark(true);
+                markMount = markMount - 1;
+                try {
+                    jStatusPanel.setLEDMineCountLeft(markMount);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if(count == 2){
+                source.setIcon(ImageIconFactory.getAsk());
+                block[m][n].setRightClickCount(count);
+                block[m][n].setIsMark(false);
+                markMount = markMount + 1;
+                try {
+                    jStatusPanel.setLEDMineCountLeft(markMount);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if(count == 3){
+                source.setIcon(ImageIconFactory.getBlank());
+                // source.setIcon(ImageIconFactory.getBlank());
+                block[m][n].setRightClickCount(0);
+            }
+        }
     }
 
     public void mouseReleased(MouseEvent e){
-        try {
-            if(inquireWin())jStatusPanel.setFaceHappy();
-            else jStatusPanel.setFaceCry();
-            jStatusPanel.setFaceSmile();
-        } catch (Exception e1) {
-            e1.printStackTrace();
+//        try {
+//            jStatusPanel.setFaceSmile();
+//            if(inquireWin())jStatusPanel.setFaceHappy();
+//            if(!inquireWin())jStatusPanel.setFaceCry();
+//
+////            if(e.getSource()==jStatusPanel.expressionLabel)
+////                jStatusPanel.setFaceSmile();
+//        } catch (Exception e1) {
+//            e1.printStackTrace();
+//        }
+        int m = -1, n = -1;
+
+        // 获取当前资源位置
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < colum; j++) {
+                if (e.getSource() == blockView[i][j]
+                        .getBlockCover()) {
+                    m = i;
+                    n = j;
+                    break;
+                }
+            }
         }
 
+
+        JButton source = (JButton) e.getSource();
+        int s = e.getModifiers();
+        // 双键释放
+        if (isDouble) {
+            for (int x = Math.max(m - 1, 0); x <= Math.min(m + 1,
+                    8); x++) {
+                for (int y = Math.max(n - 1, 0); y <= Math.min(n + 1,
+                        8 - 1); y++) {
+                    if (!block[x][y].isMark
+                            && !block[x][y].isOpen)
+                        blockView[x][y].blockCover
+                                .setIcon(ImageIconFactory.getBlank());
+                }
+            }
+
+            // 2 表情惊讶还原
+            jStatusPanel.setFaceSmile();
+            isDouble = false;
+        }
+        // 左键释放
+        else if (s == InputEvent.BUTTON1_MASK) {
+            if (e.getSource() != jStatusPanel.expressionLabel
+                    && e.getSource() != time) {
+                jStatusPanel.setTimerStart();
+
+                // 如果是雷，将雷遍历显示
+                if (block[m][n].isMine()) {
+                    blockView[m][n].blockNameOrIcon
+                            .setIcon(ImageIconFactory.getRedMine());
+
+                    for (int i = 0; i < row; i++) {
+                        for (int j = 0; j < colum; j++) {
+                           blockView[i][j].blockCover.setEnabled(false);
+                            if (block[i][j].isMine() && block[i][j].isMark)
+                                blockView[i][j].blockNameOrIcon.setIcon(ImageIconFactory.getFlag());
+                            if (block[i][j].isMine() == false && block[i][j].isMark)
+                                blockView[i][j].blockNameOrIcon.setIcon(ImageIconFactory.getWrongMine());
+
+                            // 如果是雷显示
+                            if (block[i][j].isMine())
+                                blockView[i][j].seeBlockNameOrIcon();
+
+                            if (block[i][j].isMine() == false && block[i][j].isMark)
+                                blockView[i][j].seeBlockNameOrIcon();
+                            // 移出鼠标监听器
+
+
+                        }
+                    }
+                    jStatusPanel.setTimerStop();
+                    jStatusPanel.setFaceCry();
+                    markMount = mineCount;
+                }
+
+                else {
+                    jStatusPanel.setFaceSmile();
+                    show(m, n); // 见本类后面的show方法
+
+                }
+            }
+        }
     }
 
-    public void mouseEntered(MouseEvent e){}
-    public void mouseExited(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){
+        if(e.getSource()==jStatusPanel.expressionLabel){
+            jStatusPanel.expressionLabel.setIcon(ImageIconFactory.getFaceSmilePressed());
+        }
+    }
+    public void mouseExited(MouseEvent e){
+        if(e.getSource()==jStatusPanel.expressionLabel){
+            jStatusPanel.setFaceSmile();
+        }
+    }
     public void mouseClicked(MouseEvent e){}
 
 
