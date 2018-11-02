@@ -27,6 +27,7 @@ public class BlockView extends JPanel{
         add("view",blockNameOrIcon);
     }
     public void giveView(Block block){
+        blockNameOrIcon.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         if(block.isMine){
             blockNameOrIcon.setText(block.getName());
             blockNameOrIcon.setIcon(block.getMineicon());

@@ -194,8 +194,7 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                     break;
                 case 3: record.setGrade("高级");
                     break;
-                case 4:
-                    record.setGrade("自定义雷区");
+                case 4: record.setGrade("自定义雷区");
                     break;
             }
             jStatusPanel.setLEDMineCountLeft(markMount);
@@ -326,8 +325,9 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
         if(d == InputEvent.BUTTON1_DOWN_MASK + InputEvent.BUTTON3_DOWN_MASK){
             for(int x = Math.max(m-1,0); x<= Math.min(m+1,8);x++){
                 for(int y =  Math.max(n - 1, 0); y <= Math.min(n+1,8);y++){
-                    if(!block[x][y].isMark && block[x][y].isOpen)
-                        blockView[x][y].blockCover.setIcon(ImageIconFactory.getNumber(0));
+                    if(!block[x][y].isMark && block[x][y].isOpen) {
+                        blockView[x][y].blockCover.setIcon(ImageIconFactory.getBlankPressed());
+                    }
                 }
             }
             jStatusPanel.setFaceSurprised();
@@ -462,6 +462,19 @@ public class MineArea extends JPanel implements ActionListener,MouseListener{
                     jStatusPanel.setFaceSmile();
                     show(m, n); // 见本类后面的show方法
 
+                }
+            }
+            else {
+                jStatusPanel.setFaceSmile();
+                try {
+                    initMineArea(row,colum,mineCount,grade);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    jStatusPanel.resetTimer();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
         }
