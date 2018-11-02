@@ -1,19 +1,18 @@
-import java.awt.event.*;
-import java.awt.*;
 import javax.swing.*;
-import java.util.*;
-import java.io.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Hashtable;
+
 /*
-* Author：Lynne
-* Date：9/19/2018
-* 功能：扫雷游戏主窗口和main方法
-*/
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
-import java.io.*;
+ * Author：Lynne
+ * Date：9/19/2018
+ * 功能：扫雷游戏主窗口和main方法
+ */
 public class MineGame extends JFrame implements ActionListener{
     JMenuBar bar;
     JMenu fileMenu;
@@ -107,12 +106,12 @@ public class MineGame extends JFrame implements ActionListener{
             }
             if (e.getSource() == 高级) {
                 mineArea.initMineArea(22, 22, 99, 3);
-                setBounds(100, 100, 627, 457);
+                setBounds(100, 100, 460, 580);
                 //mineArea.pNorth.setBorder();
             }
         if(e.getSource()==专家级){
             mineArea.initMineArea(28,28,99,4);
-            setBounds(100,100,490,500);
+            setBounds(100,100,580,680);
         }
             if (e.getSource() == 自定义雷区) {
                 c = new Custom();
